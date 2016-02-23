@@ -1,0 +1,15 @@
+{
+    "name": "Telemetry",
+    "version": "0.0.1",
+    "dependencies": {
+        "angular":          "^1.5.1",
+        "angular-route":    "^1.5.1",
+        "angular-sanitize": "^1.5.1",
+        "angular-messages": "^1.5.1",
+        "angular-mocks":    "^1.5.1",
+        "jquery":           "^2.2.0",
+        "underscore":       "^1.8.3",
+        "restangular":      "^1.5.2"
+    },
+    "analytics": false
+}

@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars: 
+    web_root: /app
+  sudo: yes
+  tasks:
+  - name: ensure nginx is installed
+    apt: pkg={{item}} state=present update_cache=yes
+    with_items:
+      - nginx
+  - name: ensure nodejs is installed
+    apt: pkg=nodejs state=present update_cache=yes
+  - name: ensure nginx configuration is in place
+    template: src=nginx.conf dest=/etc/nginx/nginx.conf owner=root group=root mode=0644
+    notify: 
+    - restart nginx
+  - name: ensure nginx mime.types is in place
+    template: src=mime.types dest=/etc/nginx/mime.types owner=root group=root mode=0644    
+    notify: 
+    - restart nginx
+  - name: ensure app files have correct permissions
+    file: path=/app owner=vagrant group=vagrant mode=0644 recurse=yes
+  handlers:
+  - name: restart nginx
+    service: name=nginx state=restarted

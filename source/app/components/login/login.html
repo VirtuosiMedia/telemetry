@@ -1,0 +1,21 @@
+<div id="loginContainer" ng-controller="loginController">
+	<h1>Login</h1>
+	<form id="loginForm" name="loginForm" ng-submit="login()" novalidate>
+		<div class="standalone error" ng-show="failedLogin">
+			<span>Email and/or password is incorrect.</span>
+		</div>	
+		<label for="email">Email</label>
+		<div class="error" ng-messages="loginForm.email.$error" ng-if="loginForm.email.$touched">
+			<span ng-message="email">Please enter a valid email.</span>
+			<span ng-message="required">Please enter an email address.</span>
+		</div>		
+		<input id="email" name="email" type="email" ng-model="email" required ng-model-options="{updateOn: 'blur'}" autofocus/>
+		<label for="password">Password</label>
+		<div class="error" ng-messages="loginForm.password.$error" ng-if="loginForm.password.$touched">
+			<span ng-message="minlength">Password must be 8 characters.</span>
+			<span ng-message="required">Please enter a password.</span>
+		</div>
+		<input id="password" name="password" type="password" ng-model="password" ng-minlength="8" required ng-model-options="{updateOn: 'blur'}"/>
+		<button id="loginButton" class="primary" >Login</button>
+	</form>
+</div>

@@ -1,0 +1,41 @@
+# Vagrantfile API/syntax version. 
+VAGRANTFILE_API_VERSION = "2"
+ 
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  
+  config.vm.box = "precise64"
+  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+  config.vm.define ("telemetry") do |training|
+    # this gives the VM a better name than 'default'
+  end
+ 
+  # ensure the VM has access to our keys so we can seamlessly use github private repos
+  config.ssh.forward_agent = true
+  
+  # Setting an ip address for the VM allows us to easily address multiple VMs if we need to
+  # so we can mirror production more closely and target different VMs with Ansible.
+  # ip address is fairly arbitrary, if you change it, be sure to update `hosts` file
+  # be sure to use an address in the private network space: 
+  # https://en.wikipedia.org/wiki/Private_network#Private_IPv4_address_spaces
+  #config.vm.network :private_network, ip: "192.168.33.10"
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. For ease of use, we'll just use the same port.
+  config.vm.network :forwarded_port, guest: 1235, host: 1235 # Change to whatever port you need for your app
+
+  # If you have trouble using a privileged port (ports lower than 1024 typically), 
+  # then change your app to run on a higher port for your development environment
+  
+  ##This is done because otherwise the network would not be accessible via wifi
+  config.vm.network "public_network", bridge: 'en1: Wi-Fi (AirPort)'
+
+  # first param is dir on host, second param is dir on VM, third param represents the directory and file permissions
+  config.vm.synced_folder "../source/", "/app" #, :mount_options => ['dmode=755', 'fmode=644'] 
+   
+  # For information on available options for the Virtualbox provider, please visit:
+  # http://docs.vagrantup.com/v2/virtualbox/configuration.html
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "512"]
+  end
+ 
+end
